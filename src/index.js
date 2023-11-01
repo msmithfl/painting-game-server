@@ -11,11 +11,11 @@ app.use(cors());
 const PORT = process.env.PORT || 3001;
 
 // Serve static assets (e.g., CSS, images, etc.) directly
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, 'dist')));
 
 // Define a catch-all route to serve your React app for all non-static routes
 app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
 const io = new Server(server, {

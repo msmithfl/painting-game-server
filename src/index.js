@@ -9,11 +9,11 @@ app.use(cors());
 
 const PORT = process.env.PORT || 3001;
 
-const io =  new Server(server, {
-    cors: {
-        origin: "http://localhost:5173",
-        methods: ["GET", "POST"],
-    }
+const io = new Server(server, {
+  cors: {
+      origin: ["http://localhost:5173", "https://painting-game-client.onrender.com/"],
+      methods: ["GET", "POST"],
+  }
 });
 
 // Initialize an object to store users in rooms

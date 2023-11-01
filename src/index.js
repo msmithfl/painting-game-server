@@ -15,8 +15,9 @@ app.use(express.static(path.join(__dirname, 'painting-game-client/dist')));
 
 // Define a catch-all route to serve your React app for all non-static routes
 app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'painting-game-client/dist', 'index.html'));
+  res.sendFile(path.join(__dirname, 'painting-game-client', 'dist', 'index.html'));
 });
+
 
 const io = new Server(server, {
   cors: {

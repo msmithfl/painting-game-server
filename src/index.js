@@ -4,10 +4,19 @@ const app = express();
 const server = http.createServer(app);
 const { Server } = require('socket.io');
 const cors = require("cors");
+const path = require("path");
 
 app.use(cors());
 
 const PORT = process.env.PORT || 3001;
+
+// Serve static assets (e.g., CSS, images, etc.) directly
+app.use(express.static(path.join(__dirname, 'build')));
+
+// Define a catch-all route to serve your React app for all non-static routes
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 const io = new Server(server, {
   cors: {
@@ -16,7 +25,7 @@ const io = new Server(server, {
   }
 });
 
-// Add the following code to set the 'Access-Control-Allow-Origin' header
+// Setting the 'Access-Control-Allow-Origin' header
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "https://painting-game-client.onrender.com");
   res.header("Access-Control-Allow-Methods", "GET, POST");

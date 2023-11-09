@@ -65,7 +65,7 @@ io.on('connection', (socket) => {
         user.isReady = !isReady;
       }
       io.to(roomName).emit('updateUserList', usersInRooms[roomName]);
-      //console.log(usersInRooms[roomName]);
+      console.log(usersInRooms[roomName]);
     });
   });
   
@@ -89,6 +89,11 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on('generateNumber', (roomName) => {
+    const randomValue = Math.floor(Math.random() * 2);
+
+    io.to(roomName).emit('receiveNumber', randomValue);
+  });
 
   socket.on('disconnect', () => {
     console.log(`User ${socket.id} disconnected`);

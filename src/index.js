@@ -91,7 +91,7 @@ io.on('connection', (socket) => {
 
   socket.on('generateNumber', (roomName) => {
     const randomValue = Math.floor(Math.random() * 4);
-
+    
     io.to(roomName).emit('receiveNumber', randomValue);
   });
 

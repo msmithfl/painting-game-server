@@ -37,6 +37,8 @@ app.use((req, res, next) => {
 // Initialize an object to store users in rooms
 const usersInRooms = {};
 
+const usedPaintingsInRooms = {};
+
 io.on('connection', (socket) => {
   //console.log(`A user ${socket.id} connected`);
 
@@ -68,6 +70,18 @@ io.on('connection', (socket) => {
       //console.log(usersInRooms[roomName]);
     });
   });
+
+  // socket.on('changeUsername', (username) => {
+  //   // Find the user in the list by socket.id and set isReady to true
+  //   Object.keys(usersInRooms).forEach((roomName) => {
+  //     const user = usersInRooms[roomName].find((user) => user.id === socket.id);
+  //     if (user) {
+  //       user.userName = username;
+  //     }
+  //     io.to(roomName).emit('updateUserList', usersInRooms[roomName]);
+  //     //console.log(usersInRooms[roomName]);
+  //   });
+  // });
   
   socket.on('sendScore', (score) => {
     // Find the user in the list by socket.id and set isReady to true
@@ -89,9 +103,37 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on('setUsedPaintings', (roomName, paintingNum) => {
+    // Ensure that usedPaintingsInRooms[roomName] is initialized as an array
+    if (!usedPaintingsInRooms[roomName]) {
+      usedPaintingsInRooms[roomName] = [];
+    }
+
+    // Check if paintingNum already exists in the array before pushing
+    if (!usedPaintingsInRooms[roomName].includes(paintingNum)) {
+      // Add the paintingNum to the list of used paintings in the room
+      usedPaintingsInRooms[roomName].push(paintingNum);
+    }
+    console.log(usedPaintingsInRooms[roomName]);
+  });
+
   socket.on('generateNumber', (roomName) => {
-    const randomValue = Math.floor(Math.random() * 4);
-    
+    var randomValue = 0;
+    // Ensure that usedPaintingsInRooms[roomName] is initialized as an array
+    if (!usedPaintingsInRooms[roomName]) {
+      usedPaintingsInRooms[roomName] = [];
+    }
+
+    // Reset the array if its length is 4
+    if (usedPaintingsInRooms[roomName].length === 4) {
+      usedPaintingsInRooms[roomName] = [];
+    }
+
+    // Keep generating a random number until a unique one is found
+    do {
+      randomValue = Math.floor(Math.random() * 4);
+    } while (usedPaintingsInRooms[roomName].includes(randomValue));
+
     io.to(roomName).emit('receiveNumber', randomValue);
   });
 

@@ -39,6 +39,21 @@ const usersInRooms = {};
 
 const usedPaintingsInRooms = {};
 
+const playerIconPaths = [
+  "/imgs/player_icons/icon_alligator.png",
+  "/imgs/player_icons/icon_anchor.png",
+  "/imgs/player_icons/icon_coffee.png",
+  "/imgs/player_icons/icon_domino.png",
+  "/imgs/player_icons/icon_flamingo.png",
+  "/imgs/player_icons/icon_florida.png",
+  "/imgs/player_icons/icon_rooster.png",
+  "/imgs/player_icons/icon_sun.png",
+  "/imgs/player_icons/icon_sunglasses.png",
+  "/imgs/player_icons/icon_tree.png"
+];
+
+const usedPlayerIconsInRooms = {};
+
 io.on('connection', (socket) => {
   //console.log(`A user ${socket.id} connected`);
 
@@ -51,8 +66,12 @@ io.on('connection', (socket) => {
     if (!usersInRooms[roomName]) {
       usersInRooms[roomName] = [];
     }
+
+    // Selecting a value for player icon
+    var randomValue = Math.floor(Math.random() * 9);
+    
     // Add the user to the list of users in the room, pushing socket.id, userName and roomName
-    usersInRooms[roomName].push({ id: socket.id, userName: userName, roomName: roomName, isReady: false, score: 0 });
+    usersInRooms[roomName].push({ id: socket.id, userName: userName, roomName: roomName, isReady: false, score: 0, playerIcon: playerIconPaths[randomValue] });
 
     // Emit the updated list of users to all users in the room
     io.to(roomName).emit('updateUserList', usersInRooms[roomName]);
@@ -114,7 +133,7 @@ io.on('connection', (socket) => {
       // Add the paintingNum to the list of used paintings in the room
       usedPaintingsInRooms[roomName].push(paintingNum);
     }
-    console.log(usedPaintingsInRooms[roomName]);
+    //console.log(usedPaintingsInRooms[roomName]);
   });
 
   socket.on('generateNumber', (roomName) => {

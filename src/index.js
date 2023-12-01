@@ -52,8 +52,6 @@ const playerIconPaths = [
   "/imgs/player_icons/icon_tree.png"
 ];
 
-const usedPlayerIconsInRooms = {};
-
 io.on('connection', (socket) => {
   //console.log(`A user ${socket.id} connected`);
 
@@ -68,7 +66,7 @@ io.on('connection', (socket) => {
     }
 
     // Selecting a value for player icon
-    var randomValue = Math.floor(Math.random() * 9);
+    var randomValue = Math.floor(Math.random() * 10);
     
     // Add the user to the list of users in the room, pushing socket.id, userName and roomName
     usersInRooms[roomName].push({ id: socket.id, userName: userName, roomName: roomName, isReady: false, score: 0, playerIcon: playerIconPaths[randomValue] });
@@ -89,18 +87,6 @@ io.on('connection', (socket) => {
       //console.log(usersInRooms[roomName]);
     });
   });
-
-  // socket.on('changeUsername', (username) => {
-  //   // Find the user in the list by socket.id and set isReady to true
-  //   Object.keys(usersInRooms).forEach((roomName) => {
-  //     const user = usersInRooms[roomName].find((user) => user.id === socket.id);
-  //     if (user) {
-  //       user.userName = username;
-  //     }
-  //     io.to(roomName).emit('updateUserList', usersInRooms[roomName]);
-  //     //console.log(usersInRooms[roomName]);
-  //   });
-  // });
   
   socket.on('sendScore', (score) => {
     // Find the user in the list by socket.id and set isReady to true

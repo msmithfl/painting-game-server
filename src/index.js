@@ -69,7 +69,7 @@ io.on('connection', (socket) => {
     var randomValue = Math.floor(Math.random() * 10);
     
     // Add the user to the list of users in the room, pushing socket.id, userName and roomName
-    usersInRooms[roomName].push({ id: socket.id, userName: userName, roomName: roomName, isReady: false, score: 0, playerIcon: playerIconPaths[randomValue] });
+    usersInRooms[roomName].push({ id: socket.id, userName: userName, roomName: roomName, isReady: false, score: 0, playerIcon: playerIconPaths[randomValue], canvasData: [] });
 
     // Emit the updated list of users to all users in the room
     io.to(roomName).emit('updateUserList', usersInRooms[roomName]);
@@ -98,6 +98,20 @@ io.on('connection', (socket) => {
       //console.log(usersInRooms[roomName]);
     });
   });
+
+  socket.on('sendCanvasData', (canvasData) => {
+    // Convert Buffer to array of numbers
+    const dataArray = Array.from(canvasData);
+    
+    // Find the user in the list by socket.id and set canvas data
+    Object.keys(usersInRooms).forEach((roomName) => {
+        const user = usersInRooms[roomName].find((user) => user.id === socket.id);
+        if (user) {
+            user.canvasData = dataArray; // Store the converted array in user object
+        }
+        console.log(usersInRooms[roomName]);
+    });
+});
 
   socket.on('getUsers', (roomName) => {
     if (usersInRooms[roomName]) {

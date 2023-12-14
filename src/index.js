@@ -144,13 +144,13 @@ io.on('connection', (socket) => {
     }
 
     // Reset the array if its length is 4
-    if (usedPaintingsInRooms[roomName].length === 4) {
+    if (usedPaintingsInRooms[roomName].length === 5) {
       usedPaintingsInRooms[roomName] = [];
     }
 
     // Keep generating a random number until a unique one is found
     do {
-      randomValue = Math.floor(Math.random() * 4);
+      randomValue = Math.floor(Math.random() * 5);
     } while (usedPaintingsInRooms[roomName].includes(randomValue));
 
     io.to(roomName).emit('receiveNumber', randomValue);

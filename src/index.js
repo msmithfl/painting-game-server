@@ -11,24 +11,24 @@ app.use(cors());
 const PORT = process.env.PORT || 3001;
 
 // Serve static assets (e.g., CSS, images, etc.) directly
-app.use(express.static(path.join(__dirname, 'painting-game-client/dist')));
+app.use(express.static(path.join(__dirname, 'masterpiecemayhem/dist')));
 
 // Define a catch-all route to serve your React app for all non-static routes
 app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'painting-game-client', 'dist', 'index.html'));
+  res.sendFile(path.join(__dirname, 'masterpiecemayhem', 'dist', 'index.html'));
 });
 
 
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:5173", "https://painting-game-client.onrender.com"],
+    origin: ["http://localhost:5173", "https://masterpiecemayhem.onrender.com"],
     methods: ["GET", "POST"],
   }
 });
 
 // Setting the 'Access-Control-Allow-Origin' header
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://painting-game-client.onrender.com");
+  res.header("Access-Control-Allow-Origin", "https://masterpiecemayhem.onrender.com");
   res.header("Access-Control-Allow-Methods", "GET, POST");
   res.header("Access-Control-Allow-Headers", "Content-Type");
   next();
